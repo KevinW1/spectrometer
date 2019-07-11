@@ -9,7 +9,7 @@
     "saveCSV": false,
     "peakDetection": true,
     "preSmooth": false,
-    "srgbCorrect": true,
+    "srgbCorrect": false,
     "filterWidth": 9,
     "peakSpacing": 8
   },
@@ -21,7 +21,6 @@
       -2.646443817866384E-6,
       269
     ],
-    "darkSamples": [],
     "camName": "name=Video Camera           ,size=640x480,fps=30"
   }
 }
