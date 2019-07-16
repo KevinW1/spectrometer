@@ -100,19 +100,18 @@ void loadCsv(String _path) {
 }
 
 // write data to disk
-void saveData() {
+void saveData(String _fileName, boolean _saveCSV, float[] _data, float[] _wavelength, boolean[] _peaks) {
 
     // save image file
     fill(255);
-    fileName = cp5.get(Textfield.class, "fileName").getText();
     textAlign(CENTER, CENTER);
-    text(fileName+imageExt, width/2, height-20);
-    save(fileName+imageExt);
+    text(_fileName+imageExt, width/2, height-20);
+    save(_fileName+imageExt);
     print ("saving image");
 
     // save csv file
-    if (saveCSV) {
-        saveStrings(fileName+".csv", toCsv(data));
+    if (_saveCSV) {
+        saveStrings(_fileName+".csv", toCsv(_data, _wavelength, _peaks));
         print (" ...and csv file");
     }
 

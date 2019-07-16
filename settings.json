@@ -1,15 +1,15 @@
 {
   "controls": {
     "camHeight": 480,
-    "lineStack": 128,
+    "lineStack": 76,
     "peakThresh": 0.026399997994303703,
     "smoothKernel": 2,
     "camWidth": 640,
     "imageExt": ".png",
     "saveCSV": false,
     "peakDetection": true,
-    "preSmooth": false,
-    "srgbCorrect": false,
+    "preSmooth": true,
+    "srgbCorrect": true,
     "filterWidth": 9,
     "peakSpacing": 8
   },

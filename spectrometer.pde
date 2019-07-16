@@ -68,7 +68,7 @@ String settingsFile = "settings";
 // Control vars
 boolean run = true;
 boolean srgbCorrect = true;
-boolean preSmooth = true;
+boolean preSmooth = false;
 boolean dispPixels = false;
 boolean peakDetection = true;
 int lineStack = 20;
@@ -107,7 +107,7 @@ void setup() {
 void draw() {
     
     if (run) {
-        getPixels(lineStack, dataColor, data);
+        data = getPixels(lineStack, dataColor, data);
         analyze();
     }
 
@@ -118,18 +118,19 @@ void draw() {
 
 
 void analyze() {
+
+    //float[] output = _data.clone();
   
     if (preSmooth) {
-        convolve(kernels[smoothKernel], data, buffer1);
-    }
-    else {
+        buffer1 = convolve(kernels[smoothKernel], data);
+    }else{
         buffer1 = data.clone();
     }
 
 
     if (peakDetection) {
-        buffer2 = smoothDat(2, filterWidth, buffer1);
-        findPeaks(buffer1, buffer2, peakThresh, peakSpacing, peaks);  // find peaks
+        buffer2 = smoothDat(2, filterWidth, data);
+        findPeaks(data, buffer2, peakThresh, peakSpacing, peaks);  // find peaks
     }
 }
 
@@ -179,7 +180,6 @@ void setupCam(String _camName) {
         wavelength  =  new float[camWidth];
         data        = new float[camWidth];
         dark        = new float[camWidth];
-        buffer1     = new float[camWidth];
         buffer2     = new float[camWidth];
         peaks       = new boolean[camWidth];
         pg          = createGraphics(camWidth, camHeight);
@@ -219,13 +219,13 @@ void darkCapture() {
      */
 
     Arrays.fill(dark, 0.0);             // Clear the dark sample array
-    getPixels(lineStack, dataColor, data);  //capture the new data (dark will be zero)
+    data = getPixels(lineStack, dataColor, data);  //capture the new data (dark will be zero)
     arrayCopy(data, dark);                  //set dark[] equal to the new data
 }
 
 
 
-void getPixels(int _halfWidth, float[][] _dataColor, float[] _data ) {
+float[] getPixels(int _halfWidth, float[][] _dataColor, float[] _data ) {
 
    /*
     * captures pixel data from camera
@@ -234,6 +234,8 @@ void getPixels(int _halfWidth, float[][] _dataColor, float[] _data ) {
     * data[] stores averaged monochrome pixel values
     * dataColor[] stores averaged R,G,B pixel values
     */
+
+    float[] output = _data.clone();
 
     if (cam.available() == true) {
 
@@ -272,7 +274,7 @@ void getPixels(int _halfWidth, float[][] _dataColor, float[] _data ) {
             }
 
             // fill master data array
-            _data[camWidth-i-1] = val;
+            output[camWidth-i-1] = val;
 
             // fill RGB data array
             _dataColor[camWidth-i-1][0] = R;
@@ -282,6 +284,7 @@ void getPixels(int _halfWidth, float[][] _dataColor, float[] _data ) {
 
         }
     }
+    return output;
 }
 
 

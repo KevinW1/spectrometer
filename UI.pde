@@ -137,12 +137,12 @@ void display() {
         // spectrum bars
         drawSpectrums(10, 5, 25, 15, i);
         // data plot
-        drawGraph(50, 235, 255, buffer1, i);
+        drawGraph(50, 235, 255, data, i);
 
         // peaks and smoothed data
         if (peakDetection) {
           drawGraph(50, 235, color(1, 108, 158, 255), buffer2, i);
-          drawPeaks(50, 235, buffer1, peaks, i);
+          drawPeaks(50, 235, data, peaks, i);
         }
 
         // warn of clipped pixels
@@ -311,7 +311,11 @@ void videoOverlay(int _x, int _y, float _scale) {
 void keyPressed() {
 
     if (keyCode == 32 || keyCode == ENTER || keyCode == RETURN) {
-        saveData();
+        saveData(cp5.get(Textfield.class, "fileName").getText(), 
+                    saveCSV, 
+                    data, 
+                    wavelength, 
+                    peaks);
     }
 
 }

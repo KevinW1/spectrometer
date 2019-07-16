@@ -1,5 +1,8 @@
 // 1D convolution
-void convolve(int[] _kernel, float[] _data, float[] _output) {
+float[] convolve(int[] _kernel, float[] _data) {
+
+    // temp arrays used for input/output
+    float[] output = _data.clone();
 
     // half the kernel width
     int halfWidth = int((_kernel.length-1)*0.5);
@@ -20,7 +23,7 @@ void convolve(int[] _kernel, float[] _data, float[] _output) {
             
             // reflect at zero
             if (position < 0) {
-                position  = abs(position);
+                position  *= -1;
             }
 
             // reflect at end
@@ -36,8 +39,10 @@ void convolve(int[] _kernel, float[] _data, float[] _output) {
         val *= normalization;
 
         // store output
-        _output[i] = val;
+        output[i] = val;
     }
+
+    return output;
 }
 
 
@@ -45,7 +50,7 @@ void convolve(int[] _kernel, float[] _data, float[] _output) {
 float[] smoothDat(int _pass, int _window, float[] _data) {
 
     // temp arrays used for input/output
-    float[] data2 = _data.clone(), data3 = _data.clone();
+    float[] output = _data.clone(); //, data3 = _data.clone();
     
     // set boxcar size based on window size
     int[] kernel = new int[_window*2+1];
@@ -58,22 +63,22 @@ float[] smoothDat(int _pass, int _window, float[] _data) {
 
     // pass over data
     for (int k = 0; k < _pass; k++) {
-        convolve(kernel, data2, data3);
-        data2 = data3;  //swap in/out arrays
+        output = convolve(kernel, output);
+        //data2 = data3;  //swap in/out arrays
     }
 
-    return data2;
+    return output;
 }
 
 
 
 // converts a float array to a csv file for fun in MS excel
-String[] toCsv(float[] _data) {
+String[] toCsv(float[] _data, float[] _wavelength, boolean[] _peaks) {
 
     String[] fileContents=new String[_data.length];
 
     for (int i = 0; i < _data.length; i++) {
-        fileContents[i] = (str(i) + "," +  str(wavelength[i]) + "," + str(_data[i]) + "," + str(peaks)[i]);
+        fileContents[i] = (str(i) + "," +  str(_wavelength[i]) + "," + str(_data[i]) + "," + str(_peaks[i]));
     }
 
     return fileContents;
