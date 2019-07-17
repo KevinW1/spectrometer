@@ -82,6 +82,7 @@ void initUI(ControlP5 cp5){
         .setPosition(310, 345)
         .setSize(40, 10)
         .setLabel("SAVE")
+        .setTriggerEvent(Bang.RELEASE)
         .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);  
 
     cp5.addTextfield("fileName")
@@ -137,20 +138,20 @@ void display() {
         // spectrum bars
         drawSpectrums(10, 5, 25, 15, i);
         // data plot
-        drawGraph(50, 235, 255, data, i);
+        drawGraph(50, 235, 255, buffer1, i);
 
         // peaks and smoothed data
         if (peakDetection) {
           drawGraph(50, 235, color(1, 108, 158, 255), buffer2, i);
-          drawPeaks(50, 235, data, peaks, i);
+          drawPeaks(50, 235, buffer1, peaks, i);
         }
 
         // warn of clipped pixels
-        clipWarning(50, 235, 0.90, data, i);
+        clipWarning(50, 235, 0.90, buffer1, i);
     }
 
     // raw camera feed
-    videoOverlay(40, 420, .1);
+    //videoOverlay(40, 420, .1);
 }
 
 
@@ -202,7 +203,9 @@ void drawHScale(int _y, int _height, int _i, float[] _wavelength) {
     }
 
     // decide if to draw label text
-    if (0.99 > val%100) {
+    // the below craziness is because val can be 449.8 and then 450.1
+    // so a threshold is used.  I'm sure there's a better way
+    if ((val) % 50 <= .5 ) {
         stroke(50);
         fill(100);
         line(_i, _y, _i, _y+5+_height); //tick mark
@@ -339,6 +342,17 @@ void controlEvent(ControlEvent theEvent) {
             camName = selectedItem.getName();
             cam.stop();
             setupCam(camName);
+        }
+    }else{
+
+        String myName = theEvent.getController().getName();
+
+        if (myName == "saveData") {
+            saveData(cp5.get(Textfield.class, "fileName").getText(), 
+                        saveCSV, 
+                        data, 
+                        wavelength, 
+                        peaks);
         }
     }
 }

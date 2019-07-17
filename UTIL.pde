@@ -98,3 +98,10 @@ float srgbToLinear(float pixelValue) {
         return pow(((pixelValue + 0.055)/(1 + 0.055)), 2.4);
     }
 }
+
+
+float roundN(float _val, int _place){
+
+    return Math.round(_val * 10 * _place) / 10*_place;
+
+}

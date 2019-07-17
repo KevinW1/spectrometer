@@ -1,24 +1,24 @@
 {
   "controls": {
     "camHeight": 480,
-    "lineStack": 76,
+    "lineStack": 100,
     "peakThresh": 0.026399997994303703,
     "smoothKernel": 2,
     "camWidth": 640,
     "imageExt": ".png",
-    "saveCSV": false,
+    "saveCSV": true,
     "peakDetection": true,
-    "preSmooth": true,
+    "preSmooth": false,
     "srgbCorrect": true,
     "filterWidth": 9,
     "peakSpacing": 8
   },
   "calData": {
     "markers": [
-      304.9840087890625,
-      0.3625340461730957,
-      0.0022147265262901783,
-      -2.646443817866384E-6,
+      338.3197021484375,
+      0.7227336168289185,
+      -4.84075048007071E-4,
+      4.508374331635423E-7,
       269
     ],
     "camName": "name=Video Camera           ,size=640x480,fps=30"

@@ -71,7 +71,7 @@ boolean srgbCorrect = true;
 boolean preSmooth = false;
 boolean dispPixels = false;
 boolean peakDetection = true;
-int lineStack = 20;
+int lineStack = 100;
 int smoothKernel = 2;
 int filterWidth = 6;
 float peakThresh = .004;
@@ -119,18 +119,17 @@ void draw() {
 
 void analyze() {
 
-    //float[] output = _data.clone();
-  
     if (preSmooth) {
         buffer1 = convolve(kernels[smoothKernel], data);
+
     }else{
         buffer1 = data.clone();
     }
 
 
     if (peakDetection) {
-        buffer2 = smoothDat(2, filterWidth, data);
-        findPeaks(data, buffer2, peakThresh, peakSpacing, peaks);  // find peaks
+        buffer2 = smoothDat(2, filterWidth, buffer1);
+        findPeaks(buffer1, buffer2, peakThresh, peakSpacing, peaks);  // find peaks
     }
 }
 
@@ -274,12 +273,12 @@ float[] getPixels(int _halfWidth, float[][] _dataColor, float[] _data ) {
             }
 
             // fill master data array
-            output[camWidth-i-1] = val;
+            output[i] = val;
 
             // fill RGB data array
-            _dataColor[camWidth-i-1][0] = R;
-            _dataColor[camWidth-i-1][1] = G;
-            _dataColor[camWidth-i-1][2] = B;
+            _dataColor[i][0] = R;
+            _dataColor[i][1] = G;
+            _dataColor[i][2] = B;
 
 
         }
